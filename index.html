@@ -163,8 +163,8 @@
                     </p>
 
                     <div class="pt-2 text-center">
-                        <!-- Convertido en etiqueta <a> para garantizar hipervínculos funcionales en el PDF -->
-                        <a id="btnAccederPdf" href="#" target="_blank" style="text-decoration: none;" class="bg-[#2d3a7c] hover:bg-[#1e2858] text-white font-bold py-3.5 px-8 rounded-md tracking-wider uppercase text-sm shadow-md transition-all inline-block w-full sm:w-auto text-center cursor-pointer">
+                        <!-- Botón oculto por defecto, se muestra solo para el PDF -->
+                        <a id="btnAccederPdf" href="#" target="_blank" style="display: none; text-decoration: none;" class="bg-[#2d3a7c] hover:bg-[#1e2858] text-white font-bold py-3.5 px-8 rounded-md tracking-wider uppercase text-sm shadow-md transition-all inline-block w-full sm:w-auto text-center cursor-pointer">
                             ACCEDER AL CASO
                         </a>
                     </div>
@@ -183,7 +183,6 @@
         <!-- ========================================== -->
         <section id="caseDetailView" class="hidden space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-4 no-print bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                <!-- Se oculta dinámicamente si estamos en modo cliente -->
                 <div id="btnVolver"></div>
 
                 <div class="flex items-center gap-2 ml-auto">
@@ -197,7 +196,6 @@
             </div>
 
             <div class="bg-white rounded-lg shadow-xl border border-slate-300 p-6 sm:p-10 text-slate-800 space-y-6">
-                <!-- Encabezado Oficial -->
                 <div class="border-b-2 border-slate-800 pb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <div class="flex items-center gap-3">
@@ -328,7 +326,6 @@
 
     <!-- MODAL DE PAGO (MANTENIDO) -->
     <div id="paymentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
-        <!-- Contenido original del modal acortado para lectura pero intacto estructuralmente -->
         <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden">
             <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
                 <h3 class="font-bold text-base flex items-center gap-2"><i class="fa-solid fa-handshake text-emerald-400"></i> Gestión</h3>
@@ -359,7 +356,7 @@
            CONFIGURACIÓN BACKEND - SUPABASE
            Reemplazar con tus variables de entorno para publicar.
         ======================================================================= */
-       const SUPABASE_URL = 'https://bsrgiwihfjhdmuvjbkto.supabase.co'; 
+        const SUPABASE_URL = 'https://bsrgiwihfjhdmuvjbkto.supabase.co'; 
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzcmdpd2loZmpoZG11dmpia3RvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2MTM4NDcsImV4cCI6MjEwODE4OTg0N30.7RHmve3qLOYbM5Vz73x7mXqh4h3yctRLrOh0JoKVRCo';
         
         let supabaseClient = null;
@@ -504,6 +501,8 @@
                 const caseUrl = `${baseUrl}?id=${uuid}`;
                 const btnAcceder = document.getElementById('btnAccederPdf');
                 btnAcceder.href = caseUrl;
+                
+                btnAcceder.style.display = 'inline-block'; // MUESTRA EL BOTÓN PARA EL PDF
 
                 // 4. Configuración de renderizado PDF
                 const element = document.getElementById('notificationView');
@@ -520,6 +519,7 @@
                 await html2pdf().set(opt).from(element).save();
 
                 // Restaurar el botón para que el Administrador no navegue accidentalmente por clic
+                btnAcceder.style.display = 'none'; // OCULTA EL BOTÓN NUEVAMENTE
                 btnAcceder.href = "#";
 
             } catch (error) {
